@@ -812,25 +812,6 @@
   tick();
   setInterval(tick, 1000);
 
-  // ---- Audit tool launcher (wire to your Apps Script URLs) ----
-  const AUDIT_URLS = {
-    outbound: '#',
-    inventory: '#',
-    inbound: '#',
-    afs: '#',
-    freshPutaway: '#',
-    rtv: '#'
-  };
-
-  function openAuditTool(key){
-    const url = AUDIT_URLS[key];
-    if(!url || url === '#'){
-      console.warn(`No URL configured yet for "${key}" audit module.`);
-      return;
-    }
-    window.open(url, '_blank', 'noopener');
-  }
-
   // ---- Tap feedback ripple on launch buttons ----
   document.querySelectorAll('.open-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -866,5 +847,9 @@
     installBtn.classList.add('hidden');
   });
 </script>
+
+<!-- Link to external JS containing the correct apps scripts URLs -->
+<script src="app.js"></script>
+
 </body>
 </html>
