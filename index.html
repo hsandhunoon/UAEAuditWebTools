@@ -36,6 +36,7 @@
     --mod-afs:#F2617A;
     --mod-fresh:#8CD867;
     --mod-rtv:#C48CFF;
+    --mod-supermall:#FFB703;
 
     --radius-lg:20px;
     --radius-md:14px;
@@ -45,10 +46,6 @@
     --font-mono:'JetBrains Mono', monospace;
   }
 
-  @keyframes fadeSlideUp{
-    from{opacity:0; transform:translateY(14px);}
-    to{opacity:1; transform:translateY(0);}
-  }
   @keyframes auroraDrift{
     0%,100%{transform:translate(0,0) scale(1);}
     50%{transform:translate(-2.5%,2%) scale(1.07);}
@@ -69,8 +66,9 @@
     0%,100%{box-shadow:0 0 0 0 rgba(63,216,194,0.28);}
     50%{box-shadow:0 0 0 7px rgba(63,216,194,0);}
   }
-  @keyframes rippleOut{
-    to{transform:scale(2.2); opacity:0;}
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -253,6 +251,15 @@
 
   .main-content{padding:28px 36px 60px; position:relative;}
 
+  /* SPA View Containers */
+  .view-container {
+    display: none;
+  }
+  .view-container.active-view {
+    display: block;
+    animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
   .top-header{
     display:flex;
     align-items:flex-start;
@@ -280,24 +287,9 @@
   }
   .header-titles p{color:var(--text-secondary); font-size:14.5px;}
 
-  .pwa-install-btn{
-    display:flex; align-items:center; gap:8px;
-    background:var(--glass-surface-strong);
-    border:1px solid var(--glass-border-strong);
-    color:var(--text-primary);
-    padding:10px 16px;
-    border-radius:var(--radius-sm);
-    font-size:13.5px;
-    font-weight:600;
-    transition:background 0.15s ease, transform 0.15s ease;
-    cursor:pointer;
-  }
-  .pwa-install-btn:hover{background:rgba(255,255,255,0.12); transform:translateY(-1px);}
-  .pwa-install-btn.hidden{display:none;}
-
   .ops-hero{
     border-radius:var(--radius-lg);
-    padding:30px 32px;
+    padding:24px 28px;
     margin-bottom:22px;
     display:flex;
     align-items:center;
@@ -307,27 +299,12 @@
     position:relative;
     overflow:hidden;
   }
-  .ops-hero::after{
-    content:'';
-    position:absolute;
-    top:-40%; right:-10%;
-    width:340px; height:340px;
-    background:radial-gradient(circle, rgba(63,216,194,0.16), transparent 70%);
-    pointer-events:none;
-  }
-
   .ops-clock-block{position:relative; z-index:1;}
-  .ops-clock-label{
-    font-size:12px;
-    color:var(--text-muted);
-    font-weight:600;
-    margin-bottom:8px;
-  }
+  .ops-clock-label{font-size:12px; color:var(--text-muted); font-weight:600; margin-bottom:6px;}
   .ops-clock{
     font-family:var(--font-mono);
-    font-size:44px;
+    font-size:38px;
     font-weight:600;
-    letter-spacing:0.01em;
     color:var(--text-primary);
     line-height:1;
     display:flex;
@@ -335,50 +312,15 @@
     gap:4px;
     animation:clockGlow 3s ease-in-out infinite;
   }
-  .ops-clock .ampm{font-size:16px; color:var(--accent-teal); font-weight:600; margin-left:4px;}
-  .ops-date{
-    font-family:var(--font-mono);
-    font-size:13.5px;
-    color:var(--text-secondary);
-    margin-top:8px;
-  }
+  .ops-clock .ampm{font-size:15px; color:var(--accent-teal); font-weight:600; margin-left:4px;}
+  .ops-date{font-family:var(--font-mono); font-size:13px; color:var(--text-secondary); margin-top:6px;}
 
-  .ops-shift-block{
-    position:relative; z-index:1;
-    display:flex;
-    gap:28px;
-    flex-wrap:wrap;
-  }
-  .ops-stat{min-width:110px;}
-  .ops-stat .label{font-size:11.5px; color:var(--text-muted); font-weight:600; margin-bottom:6px;}
-  .ops-stat .value{font-family:var(--font-display); font-size:18px; font-weight:700;}
+  .ops-shift-block{position:relative; z-index:1; display:flex; gap:24px; flex-wrap:wrap;}
+  .ops-stat{min-width:100px;}
+  .ops-stat .label{font-size:11px; color:var(--text-muted); font-weight:600; margin-bottom:4px;}
+  .ops-stat .value{font-family:var(--font-display); font-size:17px; font-weight:700;}
   .ops-stat .value.teal{color:var(--accent-teal);}
   .ops-stat .value.amber{color:var(--accent-amber);}
-
-  .status-banner{
-    display:flex;
-    gap:14px;
-    margin-bottom:28px;
-    flex-wrap:wrap;
-  }
-  .status-item{
-    flex:1;
-    min-width:170px;
-    border-radius:var(--radius-md);
-    padding:16px 18px;
-  }
-  .status-label{
-    display:block;
-    font-size:11.5px;
-    color:var(--text-muted);
-    font-weight:600;
-    margin-bottom:7px;
-  }
-  .status-value{
-    font-family:var(--font-display);
-    font-size:16.5px;
-    font-weight:600;
-  }
 
   .section-heading{
     font-family:var(--font-display);
@@ -396,24 +338,25 @@
     background:linear-gradient(90deg, var(--glass-border), transparent);
   }
 
+  /* Compact Cards Grid */
   .cards-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
-    gap:18px;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:16px;
   }
 
   .audit-card{
     border-radius:var(--radius-lg);
-    padding:24px;
+    padding:18px;
     position:relative;
     transition:transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
     --card-accent:var(--accent-teal);
   }
   .audit-card:hover{
-    transform:translateY(-5px);
+    transform:translateY(-4px);
     border-color:var(--glass-border-strong);
     background:var(--glass-surface-strong);
-    box-shadow:0 16px 40px -18px color-mix(in srgb, var(--card-accent) 55%, transparent);
+    box-shadow:0 12px 30px -15px color-mix(in srgb, var(--card-accent) 50%, transparent);
   }
   .audit-card.outbound{--card-accent:var(--mod-outbound);}
   .audit-card.inventory{--card-accent:var(--mod-inventory);}
@@ -421,59 +364,39 @@
   .audit-card.afs{--card-accent:var(--mod-afs);}
   .audit-card.fresh{--card-accent:var(--mod-fresh);}
   .audit-card.rtv{--card-accent:var(--mod-rtv);}
+  .audit-card.supermall{--card-accent:var(--mod-supermall);}
 
   .card-badge{
     position:absolute;
-    top:22px; right:22px;
-    font-size:10.5px;
+    top:18px; right:18px;
+    font-size:10px;
     font-weight:600;
     color:var(--card-accent);
     background:color-mix(in srgb, var(--card-accent) 16%, transparent);
     border:1px solid color-mix(in srgb, var(--card-accent) 35%, transparent);
-    padding:4px 10px 4px 8px;
+    padding:3px 8px;
     border-radius:20px;
-    display:flex;
-    align-items:center;
-    gap:5px;
-  }
-  .card-badge::before{
-    content:'';
-    width:5px; height:5px;
-    border-radius:50%;
-    background:var(--card-accent);
-    box-shadow:0 0 6px var(--card-accent);
-    animation:softPulse 1.8s ease-in-out infinite;
   }
 
   .card-icon{
-    width:46px; height:46px;
+    width:38px; height:38px;
     border-radius:var(--radius-sm);
     display:flex; align-items:center; justify-content:center;
-    font-size:19px;
+    font-size:16px;
     color:var(--card-accent);
     background:color-mix(in srgb, var(--card-accent) 14%, transparent);
     border:1px solid color-mix(in srgb, var(--card-accent) 28%, transparent);
-    margin-bottom:18px;
-    transition:transform 0.25s ease, background 0.25s ease;
+    margin-bottom:12px;
   }
-  .card-icon svg{width:23px; height:23px;}
-  .audit-card:hover .card-icon{
-    transform:scale(1.1) rotate(-4deg);
-    background:color-mix(in srgb, var(--card-accent) 22%, transparent);
-  }
+  .card-icon svg{width:20px; height:20px;}
 
-  .audit-card h3{
-    font-family:var(--font-display);
-    font-size:17px;
-    font-weight:600;
-    margin-bottom:8px;
-  }
+  .audit-card h3{font-family:var(--font-display); font-size:15px; font-weight:600; margin-bottom:6px;}
   .audit-card p{
-    font-size:13.5px;
+    font-size:12.5px;
     color:var(--text-secondary);
-    line-height:1.55;
-    margin-bottom:20px;
-    min-height:64px;
+    line-height:1.45;
+    margin-bottom:16px;
+    min-height:46px;
   }
 
   .open-btn{
@@ -484,17 +407,36 @@
     background:rgba(255,255,255,0.04);
     border:1px solid var(--glass-border);
     color:var(--text-primary);
-    padding:11px 16px;
+    padding:9px 14px;
     border-radius:var(--radius-sm);
-    font-size:13.5px;
+    font-size:12.5px;
     font-weight:600;
-    transition:background 0.15s ease, border-color 0.15s ease;
   }
   .open-btn:hover{
     background:color-mix(in srgb, var(--card-accent) 16%, transparent);
     border-color:color-mix(in srgb, var(--card-accent) 40%, transparent);
   }
-  .open-btn i{color:var(--card-accent); font-size:12px;}
+
+  /* Sub-page Specific Layout Components */
+  .detail-panel {
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-top: 18px;
+  }
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .metric-card {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    background: var(--glass-surface-strong);
+    border: 1px solid var(--glass-border);
+  }
+  .metric-card .title { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .metric-card .num { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-top: 6px; }
 
   @media (max-width: 900px){
     .app-container{grid-template-columns:1fr;}
@@ -508,8 +450,6 @@
     .sidebar.open{transform:translateX(0);}
     .menu-btn{display:flex;}
     .main-content{padding:20px 18px 50px;}
-    .ops-hero{flex-direction:column; align-items:flex-start;}
-    .ops-clock{font-size:36px;}
   }
 </style>
 </head>
@@ -536,35 +476,36 @@
       </div>
     </div>
 
+    <!-- SPA Sidebar Navigation Links -->
     <nav class="sidebar-nav">
-      <a href="#" class="nav-item active">
+      <a href="#" class="nav-item active" data-view="dashboard">
         <i class="fa-solid fa-chart-line"></i>
         <span>Dashboard</span>
       </a>
-      <div class="nav-divider">Active audits</div>
-      <a href="https://script.google.com/a/macros/noon.com/s/AKfycbybGMLrVEh4EDhH-Tu_EY167YJdH4Lf_L03f4bcy5369fBKOmdCawrGE2fwmSUTUnfq/exec" target="_blank" rel="noopener noreferrer" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 L11 8.5 L11 18 L3 18 Z"/><path d="M3 8.5 L7 5 L11 8.5"/><path d="M14 15h3M16 12h4M17 9h2"/></svg>
-        <span>Outbound audit</span>
+      <div class="nav-divider">Modules</div>
+      <a href="#inbound" class="nav-item" data-view="inbound">
+        <i class="fa-solid fa-truck-ramp-box"></i>
+        <span>Inbound Audit</span>
       </a>
-      <a href="https://script.google.com/a/macros/noon.com/s/AKfycbylIvK7yshYobzSVNg8TUxM-bgctxvahdpOnncdn3lxofiDJYqu38MLj6qSzEV3H_7p/exec" target="_blank" rel="noopener noreferrer" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.4"/><path d="M3.5 9.5h17M9 4v16"/><path d="M12 13.5l1.8 1.8L17 12"/></svg>
-        <span>Inventory audit</span>
+      <a href="#outbound" class="nav-item" data-view="outbound">
+        <i class="fa-solid fa-boxes-packing"></i>
+        <span>Outbound Audit</span>
       </a>
-      <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec" target="_blank" rel="noopener noreferrer" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13 L20.5 13 L20.5 20 L3.5 20 Z"/><path d="M12 3v8M8.5 8l3.5 3.5L15.5 8"/></svg>
-        <span>Inbound audit</span>
+      <a href="#inventory" class="nav-item" data-view="inventory">
+        <i class="fa-solid fa-warehouse"></i>
+        <span>Inventory Audit</span>
       </a>
-      <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzlSshiWjTcu6kZB8_msvMMQ6cV7basQx5ws5UxRSRmt4vTwZm4Fk9HNm0d-lW7A37O/exec" target="_blank" rel="noopener noreferrer" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.8-3 8-7 9-4-1-7-4.2-7-9V6l7-3Z"/><path d="M9 12l2.2 2.2L15.5 9.5"/></svg>
-        <span>AFS audit</span>
+      <a href="#afs" class="nav-item" data-view="afs">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>AFS Audit</span>
       </a>
-      <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzUAueV3bukblVyEYCCv6IUVZZbzMoXhyqlXbmSnpl7aQJPUbwVH2P7deMJAxsmt5LBGA/exec" target="_blank" rel="noopener noreferrer" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 3l-2.4 2M12 3l2.4 2M12 21l-2.4-2M12 21l2.4-2"/><path d="M4 8l16 8M4 8l2.6.4M4 8l1-2.4M20 16l-2.6-.4M20 16l-1 2.4"/><path d="M20 8L4 16M20 8l-2.6-.4M20 8l-1-2.4M4 16l2.6.4M4 16l1 2.4"/></svg>
-        <span>Fresh putaway</span>
+      <a href="#rtv" class="nav-item" data-view="rtv">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span>RTV Audit</span>
       </a>
-      <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxdABMozqhkCmjls187IbXiutwdAaaL73kKF0kmlkxUzuBDJB30c9mlwBJu4CCeDmvz/exec" target="_blank" rel="noopener noreferrer" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 1 1 2.1 5"/><path d="M4 15.5V19h3.5"/><rect x="13" y="9" width="6" height="6" rx="1"/></svg>
-        <span>RTV audit</span>
+      <a href="#supermall" class="nav-item" data-view="supermall">
+        <i class="fa-solid fa-store"></i>
+        <span>Supermall Audit</span>
       </a>
 
       <div class="nav-divider">System</div>
@@ -589,159 +530,230 @@
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="header-titles">
-        <h1>Warehouse Audit &amp; Quality Management</h1>
-        <p>Select an operational module to start an audit session.</p>
-      </div>
-      <div class="header-actions">
-        <button class="pwa-install-btn hidden" id="installBtn">
-          <i class="fa-solid fa-download"></i> Install app
-        </button>
+        <h1 id="pageTitle">Warehouse Audit &amp; Quality Management</h1>
+        <p id="pageSubtitle">Select an operational module to start an audit session.</p>
       </div>
     </header>
 
-    <section class="ops-hero glass">
-      <div class="ops-clock-block">
-        <div class="ops-clock-label">Facility local time</div>
-        <div class="ops-clock" id="liveClock">--:--:-- <span class="ampm" id="liveAmPm">--</span></div>
-        <div class="ops-date" id="liveDate">Loading…</div>
-      </div>
-      <div class="ops-shift-block">
-        <div class="ops-stat">
-          <div class="label">Shift</div>
-          <div class="value teal" id="shiftLabel">—</div>
+    <!-- 1. MAIN DASHBOARD VIEW -->
+    <div id="view-dashboard" class="view-container active-view">
+      <section class="ops-hero glass">
+        <div class="ops-clock-block">
+          <div class="ops-clock-label">Facility local time</div>
+          <div class="ops-clock" id="liveClock">--:--:-- <span class="ampm" id="liveAmPm">--</span></div>
+          <div class="ops-date" id="liveDate">Loading…</div>
         </div>
-        <div class="ops-stat">
-          <div class="label">Modules ready</div>
-          <div class="value">6 / 6</div>
+        <div class="ops-shift-block">
+          <div class="ops-stat">
+            <div class="label">Shift</div>
+            <div class="value teal" id="shiftLabel">—</div>
+          </div>
+          <div class="ops-stat">
+            <div class="label">Modules ready</div>
+            <div class="value">6 / 6</div>
+          </div>
         </div>
-        <div class="ops-stat">
-          <div class="label">Open flags</div>
-          <div class="value amber">0</div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="status-banner">
-        <div class="status-item glass">
-          <span class="status-label">Environment</span>
-          <span class="status-value">Secure Apps Script</span>
-        </div>
-        <div class="status-item glass">
-          <span class="status-label">Target devices</span>
-          <span class="status-value">Tablet / Windows</span>
-        </div>
-        <div class="status-item glass">
-          <span class="status-label">Sync status</span>
-          <span class="status-value">Up to date</span>
-        </div>
-      </div>
+      </section>
 
       <div class="section-heading">
-        Audit modules
+        Launch Tools
         <span class="rule"></span>
       </div>
 
       <div class="cards-grid">
+        <div class="audit-card glass inbound">
+          <div class="card-badge">Active</div>
+          <div class="card-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+          <h3>Inbound Audit</h3>
+          <p>Inspect incoming shipments, supplier compliance, dock accuracy, and PO checks.</p>
+          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+
         <div class="audit-card glass outbound">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 L11 8.5 L11 18 L3 18 Z"/><path d="M3 8.5 L7 5 L11 8.5"/><path d="M14 15h3M16 12h4M17 9h2"/></svg></div>
-          <h3>Outbound audit</h3>
+          <div class="card-badge">Active</div>
+          <div class="card-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+          <h3>Outbound Audit</h3>
           <p>Inspect outgoing shipments, pallet conditions, manifest compliance, and loading accuracy.</p>
           <a href="https://script.google.com/a/macros/noon.com/s/AKfycbybGMLrVEh4EDhH-Tu_EY167YJdH4Lf_L03f4bcy5369fBKOmdCawrGE2fwmSUTUnfq/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
-            <span>Launch tool</span>
+            <span>Launch Tool</span>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
 
         <div class="audit-card glass inventory">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.4"/><path d="M3.5 9.5h17M9 4v16"/><path d="M12 13.5l1.8 1.8L17 12"/></svg></div>
-          <h3>Inventory audit</h3>
+          <div class="card-badge">Active</div>
+          <div class="card-icon"><i class="fa-solid fa-warehouse"></i></div>
+          <h3>Inventory Audit</h3>
           <p>Verify bin accuracy, cycle counts, stock discrepancies, and location integrity.</p>
           <a href="https://script.google.com/a/macros/noon.com/s/AKfycbylIvK7yshYobzSVNg8TUxM-bgctxvahdpOnncdn3lxofiDJYqu38MLj6qSzEV3H_7p/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
-            <span>Launch tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-        </div>
-
-        <div class="audit-card glass inbound">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13 L20.5 13 L20.5 20 L3.5 20 Z"/><path d="M12 3v8M8.5 8l3.5 3.5L15.5 8"/></svg></div>
-          <h3>Inbound audit</h3>
-          <p>Inspect incoming shipments, supplier PO compliance, receiving accuracy, and dock processes.</p>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
-            <span>Launch tool</span>
+            <span>Launch Tool</span>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
 
         <div class="audit-card glass afs">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.8-3 8-7 9-4-1-7-4.2-7-9V6l7-3Z"/><path d="M9 12l2.2 2.2L15.5 9.5"/></svg></div>
-          <h3>AFS audit</h3>
-          <p>Advanced fulfillment and safety checks, hazard reporting, and operational compliance.</p>
+          <div class="card-badge">Active</div>
+          <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>AFS Audit</h3>
+          <p>Fulfillment and safety checks, hazard reporting, and operational compliance.</p>
           <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzlSshiWjTcu6kZB8_msvMMQ6cV7basQx5ws5UxRSRmt4vTwZm4Fk9HNm0d-lW7A37O/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
-            <span>Launch tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-        </div>
-
-        <div class="audit-card glass fresh">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 3l-2.4 2M12 3l2.4 2M12 21l-2.4-2M12 21l2.4-2"/><path d="M4 8l16 8M4 8l2.6.4M4 8l1-2.4M20 16l-2.6-.4M20 16l-1 2.4"/><path d="M20 8L4 16M20 8l-2.6-.4M20 8l-1-2.4M4 16l2.6.4M4 16l1 2.4"/></svg></div>
-          <h3>Fresh putaway audit</h3>
-          <p>Monitor temperature standards, cold chain compliance, and fresh goods placement.</p>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzUAueV3bukblVyEYCCv6IUVZZbzMoXhyqlXbmSnpl7aQJPUbwVH2P7deMJAxsmt5LBGA/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
-            <span>Launch tool</span>
+            <span>Launch Tool</span>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
 
         <div class="audit-card glass rtv">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 1 1 2.1 5"/><path d="M4 15.5V19h3.5"/><rect x="13" y="9" width="6" height="6" rx="1"/></svg></div>
-          <h3>RTV audit</h3>
-          <p>Verify return-to-vendor processing, vendor compliance, damaged stock, and paperwork.</p>
+          <div class="card-badge">Active</div>
+          <div class="card-icon"><i class="fa-solid fa-rotate-left"></i></div>
+          <h3>RTV Audit</h3>
+          <p>Verify return-to-vendor processing, vendor compliance, and damaged stock.</p>
           <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxdABMozqhkCmjls187IbXiutwdAaaL73kKF0kmlkxUzuBDJB30c9mlwBJu4CCeDmvz/exec" target="_blank" rel="noopener noreferrer" class="open-btn">
-            <span>Launch tool</span>
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+
+        <div class="audit-card glass supermall">
+          <div class="card-badge">Active</div>
+          <div class="card-icon"><i class="fa-solid fa-store"></i></div>
+          <h3>Supermall Audit</h3>
+          <p>Supermall fulfillment checks, item quality controls, and order preparation accuracy.</p>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="open-btn">
+            <span>Launch Tool</span>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- 2. INBOUND DETAIL VIEW -->
+    <div id="view-inbound" class="view-container">
+      <div class="metrics-row">
+        <div class="metric-card"><div class="title">INBOUND AUDITS TODAY</div><div class="num">128</div></div>
+        <div class="metric-card"><div class="title">PASS RATE</div><div class="num" style="color:var(--accent-teal);">98.2%</div></div>
+        <div class="metric-card"><div class="title">FLAGGED VENDORS</div><div class="num" style="color:var(--accent-amber);">3</div></div>
+      </div>
+      <div class="detail-panel glass">
+        <h3>Inbound Operations Details</h3>
+        <p style="margin-top:10px; color:var(--text-secondary);">Track dock arrival audits, PO compliance, and receiving station quality checks here.</p>
+      </div>
+    </div>
+
+    <!-- 3. OUTBOUND DETAIL VIEW -->
+    <div id="view-outbound" class="view-container">
+      <div class="metrics-row">
+        <div class="metric-card"><div class="title">DISPATCH ACCURACY</div><div class="num" style="color:var(--accent-teal);">99.6%</div></div>
+        <div class="metric-card"><div class="title">AUDITED SHIPMENTS</div><div class="num">342</div></div>
+      </div>
+      <div class="detail-panel glass">
+        <h3>Outbound Operations Details</h3>
+        <p style="margin-top:10px; color:var(--text-secondary);">Pallet loading, manifest accuracy, and shipment scan audits.</p>
+      </div>
+    </div>
+
+    <!-- 4. INVENTORY DETAIL VIEW -->
+    <div id="view-inventory" class="view-container">
+      <div class="metrics-row">
+        <div class="metric-card"><div class="title">LOCATION ACCURACY</div><div class="num">97.8%</div></div>
+        <div class="metric-card"><div class="title">OPEN DISCREPANCIES</div><div class="num" style="color:var(--accent-amber);">14</div></div>
+      </div>
+      <div class="detail-panel glass">
+        <h3>Inventory Control Details</h3>
+        <p style="margin-top:10px; color:var(--text-secondary);">Cycle counting progress, bin accuracy logs, and inventory discrepancy records.</p>
+      </div>
+    </div>
+
+    <!-- 5. AFS DETAIL VIEW -->
+    <div id="view-afs" class="view-container">
+      <div class="detail-panel glass">
+        <h3>AFS & Safety Audits</h3>
+        <p style="margin-top:10px; color:var(--text-secondary);">Safety observations, hazard flagging, and compliance metrics.</p>
+      </div>
+    </div>
+
+    <!-- 6. RTV DETAIL VIEW -->
+    <div id="view-rtv" class="view-container">
+      <div class="detail-panel glass">
+        <h3>Return to Vendor Details</h3>
+        <p style="margin-top:10px; color:var(--text-secondary);">RTV packing compliance, vendor return validation, and damaged stock trackers.</p>
+      </div>
+    </div>
+
+    <!-- 7. SUPERMALL DETAIL VIEW -->
+    <div id="view-supermall" class="view-container">
+      <div class="detail-panel glass">
+        <h3>Supermall Operations Details</h3>
+        <p style="margin-top:10px; color:var(--text-secondary);">Express order checks, vendor fulfillment speed, and order packing quality logs.</p>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <script>
-  // Mobile Sidebar Toggle
+  // SPA Client Router
+  const pageTitle = document.getElementById('pageTitle');
+  const pageSubtitle = document.getElementById('pageSubtitle');
+
+  const routeMeta = {
+    'dashboard': { title: 'Warehouse Audit & Quality Management', subtitle: 'Select an operational module to start an audit session.' },
+    'inbound': { title: 'Inbound Audit Module', subtitle: 'Shipment dock receiving, supplier PO compliance, and item quality audits.' },
+    'outbound': { title: 'Outbound Audit Module', subtitle: 'Pallet loading accuracy, staging checks, and dispatch manifest validation.' },
+    'inventory': { title: 'Inventory Audit Module', subtitle: 'Bin location accuracy, cycle counts, and discrepancy management.' },
+    'afs': { title: 'AFS Audit Module', subtitle: 'Advanced fulfillment safety checks and facility compliance monitoring.' },
+    'rtv': { title: 'RTV Audit Module', subtitle: 'Return to vendor processing, vendor compliance, and damaged stock logs.' },
+    'supermall': { title: 'Supermall Audit Module', subtitle: 'Quality control tracking and fulfillment precision for Supermall items.' }
+  };
+
+  function handleRoute() {
+    const rawHash = window.location.hash.replace('#', '').trim().toLowerCase();
+    const viewName = routeMeta[rawHash] ? rawHash : 'dashboard';
+
+    // Toggle active link highlights
+    document.querySelectorAll('.nav-item').forEach(link => {
+      if (link.getAttribute('data-view') === viewName) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
+    // Toggle views
+    document.querySelectorAll('.view-container').forEach(view => {
+      view.classList.remove('active-view');
+    });
+    const targetView = document.getElementById(`view-${viewName}`);
+    if (targetView) targetView.classList.add('active-view');
+
+    // Update titles
+    if (routeMeta[viewName]) {
+      pageTitle.textContent = routeMeta[viewName].title;
+      pageSubtitle.textContent = routeMeta[viewName].subtitle;
+    }
+
+    // Close mobile menu if open
+    document.getElementById('sidebar')?.classList.remove('open');
+    document.getElementById('sidebarOverlay')?.classList.remove('show');
+  }
+
+  window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('DOMContentLoaded', handleRoute);
+
+  // Mobile Drawer Control
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebarOverlay');
   const menuToggle = document.getElementById('menuToggle');
 
-  function toggleSidebar(){
+  menuToggle?.addEventListener('click', () => {
     sidebar.classList.toggle('open');
     overlay.classList.toggle('show');
-  }
-  menuToggle?.addEventListener('click', toggleSidebar);
-  overlay?.addEventListener('click', toggleSidebar);
-
-  // Theme Toggler
-  const themeToggle = document.getElementById('themeToggle');
-  const themeLabel = document.getElementById('themeLabel');
-  const themeIcon = themeToggle?.querySelector('i');
-
-  function applyTheme(mode){
-    document.documentElement.dataset.theme = mode;
-    document.body.style.filter = mode === 'light' ? 'invert(1) hue-rotate(180deg)' : 'none';
-    if(themeLabel) themeLabel.textContent = mode === 'light' ? 'Dark mode' : 'Light mode';
-    if(themeIcon) themeIcon.className = mode === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-  }
-  let currentTheme = 'dark';
-  themeToggle?.addEventListener('click', (e) => {
-    e.preventDefault();
-    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    applyTheme(currentTheme);
+  });
+  overlay?.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
   });
 
   // Live Clock
@@ -751,7 +763,6 @@
   const shiftEl = document.getElementById('shiftLabel');
 
   function pad(n){ return n.toString().padStart(2, '0'); }
-
   function shiftForHour(h){
     if(h >= 6 && h < 14) return 'Morning';
     if(h >= 14 && h < 22) return 'Afternoon';
@@ -763,48 +774,13 @@
     let h = now.getHours();
     const ampm = h >= 12 ? 'PM' : 'AM';
     const h12 = h % 12 === 0 ? 12 : h % 12;
-    clockEl.childNodes[0].textContent = `${pad(h12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} `;
-    ampmEl.textContent = ampm;
-    dateEl.textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    shiftEl.textContent = shiftForHour(h);
+    if (clockEl) clockEl.childNodes[0].textContent = `${pad(h12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} `;
+    if (ampmEl) ampmEl.textContent = ampm;
+    if (dateEl) dateEl.textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    if (shiftEl) shiftEl.textContent = shiftForHour(h);
   }
   tick();
   setInterval(tick, 1000);
-
-  // Button Ripple Effect
-  document.querySelectorAll('.open-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const ripple = document.createElement('span');
-      const rect = btn.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      ripple.style.cssText = `
-        position:absolute; left:${e.clientX - rect.left - size/2}px; top:${e.clientY - rect.top - size/2}px;
-        width:${size}px; height:${size}px; border-radius:50%;
-        background:rgba(255,255,255,0.18); pointer-events:none;
-        transform:scale(0); animation:rippleOut 0.5s ease-out forwards;
-      `;
-      btn.style.position = 'relative';
-      btn.style.overflow = 'hidden';
-      btn.appendChild(ripple);
-      ripple.addEventListener('animationend', () => ripple.remove());
-    });
-  });
-
-  // PWA Install Prompt
-  let deferredPrompt;
-  const installBtn = document.getElementById('installBtn');
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn?.classList.remove('hidden');
-  });
-  installBtn?.addEventListener('click', async () => {
-    if(!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    installBtn.classList.add('hidden');
-  });
 </script>
 
 </body>
