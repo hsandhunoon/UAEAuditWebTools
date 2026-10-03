@@ -334,7 +334,6 @@
     gap:16px;
   }
 
-  /* Neon Module Cards */
   .audit-card{
     border-radius:var(--radius-lg);
     padding:18px;
@@ -425,7 +424,6 @@
     border-color:color-mix(in srgb, var(--card-accent) 50%, transparent);
   }
 
-  /* --- Metrics & Sub-Page Detail Cards --- */
   .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -567,7 +565,6 @@
       </div>
     </div>
 
-    <!-- Navigation Menu -->
     <nav class="sidebar-nav">
       <a href="#" class="nav-item active" data-view="dashboard">
         <i class="fa-solid fa-chart-line"></i>
@@ -1024,7 +1021,7 @@
 </div>
 
 <script>
-  // Central URL to your existing deployed Apps Script Dashboard
+  // Central URL to your deployed Apps Script Dashboard
   const DASHBOARD_ENDPOINT = "https://script.google.com/macros/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec";
 
   // Module Mapping matching your Code.gs keys
@@ -1049,72 +1046,88 @@
 
   let cachedDashboardData = null;
 
-  async function loadLiveDashboardMetrics() {
-    if (cachedDashboardData) return cachedDashboardData;
-    try {
-      const res = await fetch(`${DASHBOARD_ENDPOINT}?api=true`);
-      const json = await res.json();
-      cachedDashboardData = json.data || json;
-      return cachedDashboardData;
-    } catch (err) {
-      console.error("Could not fetch backend metrics:", err);
-      return null;
-    }
+  // JSONP implementation to bypass CORS restrictions
+  function loadLiveDashboardMetrics() {
+    if (cachedDashboardData) return Promise.resolve(cachedDashboardData);
+
+    return new Promise((resolve, reject) => {
+      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+      window[callbackName] = function(data) {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        cachedDashboardData = data.data || data;
+        resolve(cachedDashboardData);
+      };
+
+      const script = document.createElement('script');
+      script.src = `${DASHBOARD_ENDPOINT}?callback=${callbackName}`;
+      script.onerror = (err) => {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        console.error("JSONP fetch failed:", err);
+        reject(err);
+      };
+      document.body.appendChild(script);
+    });
   }
 
   async function renderModuleDetails(moduleHash) {
-    const data = await loadLiveDashboardMetrics();
-    const backendKey = MODULE_KEYS[moduleHash];
-    
-    if (!data || !backendKey || !data[backendKey]) return;
+    try {
+      const data = await loadLiveDashboardMetrics();
+      const backendKey = MODULE_KEYS[moduleHash];
+      
+      if (!data || !backendKey || !data[backendKey]) return;
 
-    const sectionData = data[backendKey];
-    const availableWeeks = Object.keys(sectionData).map(Number).sort((a, b) => b - a);
+      const sectionData = data[backendKey];
+      const availableWeeks = Object.keys(sectionData).map(Number).sort((a, b) => b - a);
 
-    if (availableWeeks.length === 0) return;
+      if (availableWeeks.length === 0) return;
 
-    const latestWeekNum = availableWeeks[0];
-    const latestWeek = sectionData[latestWeekNum];
+      const latestWeekNum = availableWeeks[0];
+      const latestWeek = sectionData[latestWeekNum];
 
-    let monthlyTotal = 0;
-    let monthlyPass = 0;
-    let monthlyFail = 0;
+      let monthlyTotal = 0;
+      let monthlyPass = 0;
+      let monthlyFail = 0;
 
-    availableWeeks.forEach(w => {
-      monthlyTotal += sectionData[w].total || 0;
-      monthlyPass += sectionData[w].pass || 0;
-      monthlyFail += sectionData[w].fail || 0;
-    });
+      availableWeeks.forEach(w => {
+        monthlyTotal += sectionData[w].total || 0;
+        monthlyPass += sectionData[w].pass || 0;
+        monthlyFail += sectionData[w].fail || 0;
+      });
 
-    const weeklyPassRate = latestWeek.total > 0 ? ((latestWeek.pass / latestWeek.total) * 100).toFixed(1) + "%" : "0%";
-    const monthlyPassRate = monthlyTotal > 0 ? ((monthlyPass / monthlyTotal) * 100).toFixed(1) + "%" : "0%";
+      const weeklyPassRate = latestWeek.total > 0 ? ((latestWeek.pass / latestWeek.total) * 100).toFixed(1) + "%" : "0%";
+      const monthlyPassRate = monthlyTotal > 0 ? ((monthlyPass / monthlyTotal) * 100).toFixed(1) + "%" : "0%";
 
-    const viewContainer = document.getElementById(`view-${moduleHash}`);
-    if (!viewContainer) return;
+      const viewContainer = document.getElementById(`view-${moduleHash}`);
+      if (!viewContainer) return;
 
-    const metricValues = viewContainer.querySelectorAll('.metric-val');
-    if (metricValues.length >= 4) {
-      metricValues[0].textContent = Math.round(latestWeek.total).toLocaleString();
-      metricValues[1].textContent = Math.round(monthlyTotal).toLocaleString();
-      metricValues[2].textContent = weeklyPassRate;
-      metricValues[3].textContent = monthlyPassRate;
-    }
+      const metricValues = viewContainer.querySelectorAll('.metric-val');
+      if (metricValues.length >= 4) {
+        metricValues[0].textContent = Math.round(latestWeek.total).toLocaleString();
+        metricValues[1].textContent = Math.round(monthlyTotal).toLocaleString();
+        metricValues[2].textContent = weeklyPassRate;
+        metricValues[3].textContent = monthlyPassRate;
+      }
 
-    const tableBody = viewContainer.querySelector('.stats-table tbody');
-    if (tableBody) {
-      tableBody.innerHTML = availableWeeks.map(w => {
-        const wData = sectionData[w];
-        const pRate = wData.total > 0 ? ((wData.pass / wData.total) * 100).toFixed(1) + "%" : "0%";
-        return `
-          <tr>
-            <td>Week ${w}</td>
-            <td>${Math.round(wData.total).toLocaleString()}</td>
-            <td>${Math.round(wData.pass).toLocaleString()}</td>
-            <td>${Math.round(wData.fail).toLocaleString()}</td>
-            <td>${pRate}</td>
-          </tr>
-        `;
-      }).join('');
+      const tableBody = viewContainer.querySelector('.stats-table tbody');
+      if (tableBody) {
+        tableBody.innerHTML = availableWeeks.map(w => {
+          const wData = sectionData[w];
+          const pRate = wData.total > 0 ? ((wData.pass / wData.total) * 100).toFixed(1) + "%" : "0%";
+          return `
+            <tr>
+              <td>Week ${w}</td>
+              <td>${Math.round(wData.total).toLocaleString()}</td>
+              <td>${Math.round(wData.pass).toLocaleString()}</td>
+              <td>${Math.round(wData.fail).toLocaleString()}</td>
+              <td>${pRate}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    } catch (e) {
+      console.error("Error rendering module details:", e);
     }
   }
 
