@@ -36,6 +36,7 @@
     --mod-afs:#FF0054;
     --mod-fresh:#70E000;
     --mod-rtv:#B5179E;
+    --mod-supermall:#9D4EDD;
 
     --radius-lg:20px;
     --radius-md:14px;
@@ -52,10 +53,6 @@
   @keyframes dialRotate{
     from{transform:rotate(0deg);}
     to{transform:rotate(360deg);}
-  }
-  @keyframes softPulse{
-    0%,100%{opacity:1;}
-    50%{opacity:0.4;}
   }
   @keyframes clockGlow{
     0%,100%{text-shadow:0 0 0 rgba(63,216,194,0);}
@@ -205,7 +202,7 @@
     padding:11px 12px;
     border-radius:var(--radius-sm);
     color:var(--text-secondary);
-    font-size:14.5px;
+    font-size:14px;
     font-weight:500;
     transition:background 0.15s ease, color 0.15s ease, transform 0.15s ease;
     margin-bottom:2px;
@@ -310,7 +307,6 @@
   .ops-stat .label{font-size:11px; color:var(--text-muted); font-weight:600; margin-bottom:4px;}
   .ops-stat .value{font-family:var(--font-display); font-size:17px; font-weight:700;}
   .ops-stat .value.teal{color:var(--accent-teal);}
-  .ops-stat .value.amber{color:var(--accent-amber);}
 
   .section-heading{
     font-family:var(--font-display);
@@ -349,12 +345,13 @@
       inset 0 0 12px color-mix(in srgb, var(--card-accent) 12%, transparent);
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
   }
-  .audit-card.outbound{--card-accent:var(--mod-outbound);}
-  .audit-card.inventory{--card-accent:var(--mod-inventory);}
-  .audit-card.inbound{--card-accent:var(--mod-inbound);}
-  .audit-card.afs{--card-accent:var(--mod-afs);}
   .audit-card.fresh{--card-accent:var(--mod-fresh);}
+  .audit-card.inbound{--card-accent:var(--mod-inbound);}
+  .audit-card.outbound{--card-accent:var(--mod-outbound);}
+  .audit-card.afs{--card-accent:var(--mod-afs);}
+  .audit-card.inventory{--card-accent:var(--mod-inventory);}
   .audit-card.rtv{--card-accent:var(--mod-rtv);}
+  .audit-card.supermall{--card-accent:var(--mod-supermall);}
 
   .audit-card:hover{
     transform: translateY(-5px) scale(1.02);
@@ -483,6 +480,12 @@
     font-weight: 600;
   }
 
+  .action-buttons-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
   .external-launch-link {
     display: inline-flex;
     align-items: center;
@@ -498,6 +501,15 @@
   }
   .external-launch-link:hover {
     background: rgba(63,216,194,0.22);
+  }
+
+  .external-launch-link.editor-btn {
+    background: rgba(242,166,90,0.12);
+    border: 1px solid rgba(242,166,90,0.3);
+    color: var(--accent-amber);
+  }
+  .external-launch-link.editor-btn:hover {
+    background: rgba(242,166,90,0.22);
   }
 
   .stats-table {
@@ -565,41 +577,47 @@
       </div>
     </div>
 
+    <!-- LEFT SIDEBAR NAVIGATION -->
     <nav class="sidebar-nav">
       <a href="#" class="nav-item active" data-view="dashboard">
         <i class="fa-solid fa-chart-line"></i>
         <span>Dashboard</span>
       </a>
-      <div class="nav-divider">Active Audits</div>
-      <a href="#outbound" class="nav-item" data-view="outbound">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 L11 8.5 L11 18 L3 18 Z"/><path d="M3 8.5 L7 5 L11 8.5"/><path d="M14 15h3M16 12h4M17 9h2"/></svg>
-        <span>Outbound Audit</span>
+      <div class="nav-divider">Audit Management</div>
+      
+      <a href="#freshPutaway" class="nav-item" data-view="freshPutaway">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 3l-2.4 2M12 3l2.4 2M12 21l-2.4-2M12 21l2.4-2"/><path d="M4 8l16 8M4 8l2.6.4M4 8l1-2.4M20 16l-2.6-.4M20 16l-1 2.4"/><path d="M20 8L4 16M20 8l-2.6-.4M20 8l-1-2.4M4 16l2.6.4M4 16l1 2.4"/></svg>
+        <span>Fresh Put Audit</span>
       </a>
-      <a href="#inventory" class="nav-item" data-view="inventory">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.4"/><path d="M3.5 9.5h17M9 4v16"/><path d="M12 13.5l1.8 1.8L17 12"/></svg>
-        <span>Inventory Audit</span>
-      </a>
+      
       <a href="#inbound" class="nav-item" data-view="inbound">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13 L20.5 13 L20.5 20 L3.5 20 Z"/><path d="M12 3v8M8.5 8l3.5 3.5L15.5 8"/></svg>
         <span>Inbound Audit</span>
       </a>
+
+      <a href="#outbound" class="nav-item" data-view="outbound">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 L11 8.5 L11 18 L3 18 Z"/><path d="M3 8.5 L7 5 L11 8.5"/><path d="M14 15h3M16 12h4M17 9h2"/></svg>
+        <span>Outbound Audit</span>
+      </a>
+
       <a href="#afs" class="nav-item" data-view="afs">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.8-3 8-7 9-4-1-7-4.2-7-9V6l7-3Z"/><path d="M9 12l2.2 2.2L15.5 9.5"/></svg>
         <span>AFS Audit</span>
       </a>
-      <a href="#freshPutaway" class="nav-item" data-view="freshPutaway">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 3l-2.4 2M12 3l2.4 2M12 21l-2.4-2M12 21l2.4-2"/><path d="M4 8l16 8M4 8l2.6.4M4 8l1-2.4M20 16l-2.6-.4M20 16l-1 2.4"/><path d="M20 8L4 16M20 8l-2.6-.4M20 8l-1-2.4M4 16l2.6.4M4 16l1 2.4"/></svg>
-        <span>Fresh Putaway</span>
+
+      <a href="#inventory" class="nav-item" data-view="inventory">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.4"/><path d="M3.5 9.5h17M9 4v16"/><path d="M12 13.5l1.8 1.8L17 12"/></svg>
+        <span>Inventory Audit</span>
       </a>
+
       <a href="#rtv" class="nav-item" data-view="rtv">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 1 1 2.1 5"/><path d="M4 15.5V19h3.5"/><rect x="13" y="9" width="6" height="6" rx="1"/></svg>
         <span>RTV Audit</span>
       </a>
 
-      <div class="nav-divider">System</div>
-      <a href="#" class="nav-item" id="themeToggle">
-        <i class="fa-solid fa-sun"></i>
-        <span id="themeLabel">Light mode</span>
+      <a href="#supermall" class="nav-item" data-view="supermall">
+        <i class="fa-solid fa-store" style="font-size:15px; text-align:center; width:18px;"></i>
+        <span>Supermall Audit</span>
       </a>
     </nav>
 
@@ -623,7 +641,7 @@
       </div>
     </header>
 
-    <!-- 1. DASHBOARD VIEW -->
+    <!-- 1. MAIN DASHBOARD VIEW (Cards Launch Tools Directly) -->
     <div id="view-dashboard" class="view-container active-view">
       <section class="ops-hero glass">
         <div class="ops-clock-block">
@@ -638,97 +656,115 @@
           </div>
           <div class="ops-stat">
             <div class="label">Modules ready</div>
-            <div class="value">6 / 6</div>
+            <div class="value">7 / 7</div>
           </div>
         </div>
       </section>
 
       <div class="section-heading">
-        Active Audits
+        Active Operational Tools
         <span class="rule"></span>
       </div>
 
       <div class="cards-grid">
-        <div class="audit-card glass outbound" onclick="window.location.hash='#outbound'">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 L11 8.5 L11 18 L3 18 Z"/><path d="M3 8.5 L7 5 L11 8.5"/><path d="M14 15h3M16 12h4M17 9h2"/></svg></div>
-          <h3>Outbound audit</h3>
-          <p>Inspect outgoing shipments, pallet conditions, manifest compliance, and loading accuracy.</p>
-          <div class="open-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-chevron-right"></i>
-          </div>
-        </div>
-
-        <div class="audit-card glass inventory" onclick="window.location.hash='#inventory'">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.4"/><path d="M3.5 9.5h17M9 4v16"/><path d="M12 13.5l1.8 1.8L17 12"/></svg></div>
-          <h3>Inventory audit</h3>
-          <p>Verify bin accuracy, cycle counts, stock discrepancies, and location integrity.</p>
-          <div class="open-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-chevron-right"></i>
-          </div>
-        </div>
-
-        <div class="audit-card glass inbound" onclick="window.location.hash='#inbound'">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13 L20.5 13 L20.5 20 L3.5 20 Z"/><path d="M12 3v8M8.5 8l3.5 3.5L15.5 8"/></svg></div>
-          <h3>Inbound audit</h3>
-          <p>Inspect incoming shipments, supplier PO compliance, receiving accuracy, and dock processes.</p>
-          <div class="open-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-chevron-right"></i>
-          </div>
-        </div>
-
-        <div class="audit-card glass afs" onclick="window.location.hash='#afs'">
-          <div class="card-badge">Operational</div>
-          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.8-3 8-7 9-4-1-7-4.2-7-9V6l7-3Z"/><path d="M9 12l2.2 2.2L15.5 9.5"/></svg></div>
-          <h3>AFS audit</h3>
-          <p>Advanced fulfillment and safety checks, hazard reporting, and operational compliance.</p>
-          <div class="open-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-chevron-right"></i>
-          </div>
-        </div>
-
-        <div class="audit-card glass fresh" onclick="window.location.hash='#freshPutaway'">
+        <!-- 1. FRESH PUT AUDIT CARD -->
+        <div class="audit-card glass fresh" onclick="window.open('YOUR_FRESH_TOOL_URL', '_blank')">
           <div class="card-badge">Operational</div>
           <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 3l-2.4 2M12 3l2.4 2M12 21l-2.4-2M12 21l2.4-2"/><path d="M4 8l16 8M4 8l2.6.4M4 8l1-2.4M20 16l-2.6-.4M20 16l-1 2.4"/><path d="M20 8L4 16M20 8l-2.6-.4M20 8l-1-2.4M4 16l2.6.4M4 16l1 2.4"/></svg></div>
-          <h3>Fresh putaway audit</h3>
+          <h3>Fresh Put Audit</h3>
           <p>Monitor temperature standards, cold chain compliance, and fresh goods placement.</p>
           <div class="open-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-chevron-right"></i>
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </div>
         </div>
 
-        <div class="audit-card glass rtv" onclick="window.location.hash='#rtv'">
+        <!-- 2. INBOUND AUDIT CARD -->
+        <div class="audit-card glass inbound" onclick="window.open('https://script.google.com/a/macros/noon.com/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec', '_blank')">
+          <div class="card-badge">Operational</div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13 L20.5 13 L20.5 20 L3.5 20 Z"/><path d="M12 3v8M8.5 8l3.5 3.5L15.5 8"/></svg></div>
+          <h3>Inbound Audit</h3>
+          <p>Inspect incoming shipments, supplier PO compliance, receiving accuracy, and dock processes.</p>
+          <div class="open-btn">
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </div>
+        </div>
+
+        <!-- 3. OUTBOUND AUDIT CARD -->
+        <div class="audit-card glass outbound" onclick="window.open('https://script.google.com/a/macros/noon.com/s/AKfycbybGMLrVEh4EDhH-Tu_EY167YJdH4Lf_L03f4bcy5369fBKOmdCawrGE2fwmSUTUnfq/exec', '_blank')">
+          <div class="card-badge">Operational</div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 L11 8.5 L11 18 L3 18 Z"/><path d="M3 8.5 L7 5 L11 8.5"/><path d="M14 15h3M16 12h4M17 9h2"/></svg></div>
+          <h3>Outbound Audit</h3>
+          <p>Inspect outgoing shipments, pallet conditions, manifest compliance, and loading accuracy.</p>
+          <div class="open-btn">
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </div>
+        </div>
+
+        <!-- 4. AFS AUDIT CARD -->
+        <div class="audit-card glass afs" onclick="window.open('https://script.google.com/a/macros/noon.com/s/AKfycbzlSshiWjTcu6kZB8_msvMMQ6cV7basQx5ws5UxRSRmt4vTwZm4Fk9HNm0d-lW7A37O/exec', '_blank')">
+          <div class="card-badge">Operational</div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.8-3 8-7 9-4-1-7-4.2-7-9V6l7-3Z"/><path d="M9 12l2.2 2.2L15.5 9.5"/></svg></div>
+          <h3>AFS Audit</h3>
+          <p>Advanced fulfillment and safety checks, hazard reporting, and operational compliance.</p>
+          <div class="open-btn">
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </div>
+        </div>
+
+        <!-- 5. INVENTORY AUDIT CARD -->
+        <div class="audit-card glass inventory" onclick="window.open('https://script.google.com/a/macros/noon.com/s/AKfycbylIvK7yshYobzSVNg8TUxM-bgctxvahdpOnncdn3lxofiDJYqu38MLj6qSzEV3H_7p/exec', '_blank')">
+          <div class="card-badge">Operational</div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.4"/><path d="M3.5 9.5h17M9 4v16"/><path d="M12 13.5l1.8 1.8L17 12"/></svg></div>
+          <h3>Inventory Audit</h3>
+          <p>Verify bin accuracy, cycle counts, stock discrepancies, and location integrity.</p>
+          <div class="open-btn">
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </div>
+        </div>
+
+        <!-- 6. RTV AUDIT CARD -->
+        <div class="audit-card glass rtv" onclick="window.open('https://script.google.com/a/macros/noon.com/s/AKfycbxdABMozqhkCmjls187IbXiutwdAaaL73kKF0kmlkxUzuBDJB30c9mlwBJu4CCeDmvz/exec', '_blank')">
           <div class="card-badge">Operational</div>
           <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 1 1 2.1 5"/><path d="M4 15.5V19h3.5"/><rect x="13" y="9" width="6" height="6" rx="1"/></svg></div>
-          <h3>RTV audit</h3>
+          <h3>RTV Audit</h3>
           <p>Verify return-to-vendor processing, vendor compliance, damaged stock, and paperwork.</p>
           <div class="open-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-chevron-right"></i>
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </div>
+        </div>
+
+        <!-- 7. SUPERMALL AUDIT CARD -->
+        <div class="audit-card glass supermall" onclick="window.open('YOUR_SUPERMALL_TOOL_URL', '_blank')">
+          <div class="card-badge">Operational</div>
+          <div class="card-icon"><i class="fa-solid fa-store"></i></div>
+          <h3>Supermall Audit</h3>
+          <p>Audit retail partner inventory, packaging standards, and marketplace fulfillment quality.</p>
+          <div class="open-btn">
+            <span>Launch Tool</span>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 2. OUTBOUND MODULE DETAILS -->
-    <div id="view-outbound" class="view-container">
+    <!-- 2. FRESH PUTAWAY MODULE DETAILS -->
+    <div id="view-freshPutaway" class="view-container">
       <div class="metrics-grid">
         <div class="metric-box glass">
-          <span class="metric-tag">Weekly Audits</span>
+          <span class="metric-tag">Weekly Temperature Checks</span>
           <span class="metric-val">--</span>
-          <span class="metric-sub" style="color:var(--accent-teal);">Latest Week</span>
+          <span class="metric-sub">Latest Week</span>
         </div>
         <div class="metric-box glass">
-          <span class="metric-tag">Monthly Total</span>
+          <span class="metric-tag">Monthly Checks</span>
           <span class="metric-val">--</span>
-          <span class="metric-sub">Aggregated All Weeks</span>
+          <span class="metric-sub">Fresh items verified</span>
         </div>
         <div class="metric-box glass">
           <span class="metric-tag">Weekly Compliance</span>
@@ -744,70 +780,26 @@
 
       <div class="detail-card glass">
         <div class="detail-header">
-          <h3>Outbound Weekly Performance Breakdown</h3>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbybGMLrVEh4EDhH-Tu_EY167YJdH4Lf_L03f4bcy5369fBKOmdCawrGE2fwmSUTUnfq/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
-            <span>Launch Outbound Tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-        </div>
-        <table class="stats-table">
-          <thead>
-            <tr>
-              <th>Time Period</th>
-              <th>Audits Completed</th>
-              <th>Passed</th>
-              <th>Flagged Errors</th>
-              <th>Pass Rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="5" style="text-align:center;">Loading live data...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 3. INVENTORY MODULE DETAILS -->
-    <div id="view-inventory" class="view-container">
-      <div class="metrics-grid">
-        <div class="metric-box glass">
-          <span class="metric-tag">Weekly Audits</span>
-          <span class="metric-val">--</span>
-          <span class="metric-sub">Latest Week</span>
-        </div>
-        <div class="metric-box glass">
-          <span class="metric-tag">Monthly Total</span>
-          <span class="metric-val">--</span>
-          <span class="metric-sub">Aggregated All Weeks</span>
-        </div>
-        <div class="metric-box glass">
-          <span class="metric-tag">Weekly Accuracy</span>
-          <span class="metric-val" style="color:var(--accent-teal);">--%</span>
-          <span class="metric-sub">Pass Rate</span>
-        </div>
-        <div class="metric-box glass">
-          <span class="metric-tag">Monthly Accuracy</span>
-          <span class="metric-val" style="color:var(--accent-teal);">--%</span>
-          <span class="metric-sub">Overall Pass Rate</span>
-        </div>
-      </div>
-
-      <div class="detail-card glass">
-        <div class="detail-header">
-          <h3>Inventory Cycle Count &amp; Accuracy Details</h3>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbylIvK7yshYobzSVNg8TUxM-bgctxvahdpOnncdn3lxofiDJYqu38MLj6qSzEV3H_7p/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
-            <span>Launch Inventory Tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
+          <h3>Fresh Putaway Cold Chain Performance</h3>
+          <div class="action-buttons-group">
+            <a href="YOUR_FRESH_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzUAueV3bukblVyEYCCv6IUVZZbzMoXhyqlXbmSnpl7aQJPUbwVH2P7deMJAxsmt5LBGA/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
         </div>
         <table class="stats-table">
           <thead>
             <tr>
               <th>Week</th>
-              <th>Bins Checked</th>
-              <th>Passed</th>
-              <th>Discrepancies</th>
-              <th>Location Accuracy</th>
+              <th>Putaway Audits</th>
+              <th>Pass Count</th>
+              <th>Temp Breaches</th>
+              <th>Cold Chain Rate</th>
             </tr>
           </thead>
           <tbody>
@@ -817,7 +809,7 @@
       </div>
     </div>
 
-    <!-- 4. INBOUND MODULE DETAILS -->
+    <!-- 3. INBOUND MODULE DETAILS -->
     <div id="view-inbound" class="view-container">
       <div class="metrics-grid">
         <div class="metric-box glass">
@@ -845,10 +837,16 @@
       <div class="detail-card glass">
         <div class="detail-header">
           <h3>Inbound Weekly PO &amp; Receiving Breakdown</h3>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
-            <span>Launch Inbound Tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
+          <div class="action-buttons-group">
+            <a href="YOUR_INBOUND_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
         </div>
         <table class="stats-table">
           <thead>
@@ -858,6 +856,62 @@
               <th>Compliant POs</th>
               <th>Non-Compliant POs</th>
               <th>Receiving Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;">Loading live data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. OUTBOUND MODULE DETAILS -->
+    <div id="view-outbound" class="view-container">
+      <div class="metrics-grid">
+        <div class="metric-box glass">
+          <span class="metric-tag">Weekly Audits</span>
+          <span class="metric-val">--</span>
+          <span class="metric-sub" style="color:var(--accent-teal);">Latest Week</span>
+        </div>
+        <div class="metric-box glass">
+          <span class="metric-tag">Monthly Total</span>
+          <span class="metric-val">--</span>
+          <span class="metric-sub">Aggregated All Weeks</span>
+        </div>
+        <div class="metric-box glass">
+          <span class="metric-tag">Weekly Compliance</span>
+          <span class="metric-val" style="color:var(--accent-teal);">--%</span>
+          <span class="metric-sub">Pass Rate</span>
+        </div>
+        <div class="metric-box glass">
+          <span class="metric-tag">Monthly Compliance</span>
+          <span class="metric-val" style="color:var(--accent-teal);">--%</span>
+          <span class="metric-sub">Overall Pass Rate</span>
+        </div>
+      </div>
+
+      <div class="detail-card glass">
+        <div class="detail-header">
+          <h3>Outbound Weekly Performance Breakdown</h3>
+          <div class="action-buttons-group">
+            <a href="YOUR_OUTBOUND_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="https://script.google.com/a/macros/noon.com/s/AKfycbybGMLrVEh4EDhH-Tu_EY167YJdH4Lf_L03f4bcy5369fBKOmdCawrGE2fwmSUTUnfq/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
+        </div>
+        <table class="stats-table">
+          <thead>
+            <tr>
+              <th>Time Period</th>
+              <th>Audits Completed</th>
+              <th>Passed</th>
+              <th>Flagged Errors</th>
+              <th>Pass Rate</th>
             </tr>
           </thead>
           <tbody>
@@ -895,10 +949,16 @@
       <div class="detail-card glass">
         <div class="detail-header">
           <h3>AFS &amp; Safety Weekly Reports</h3>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzlSshiWjTcu6kZB8_msvMMQ6cV7basQx5ws5UxRSRmt4vTwZm4Fk9HNm0d-lW7A37O/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
-            <span>Launch AFS Tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
+          <div class="action-buttons-group">
+            <a href="YOUR_AFS_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzlSshiWjTcu6kZB8_msvMMQ6cV7basQx5ws5UxRSRmt4vTwZm4Fk9HNm0d-lW7A37O/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
         </div>
         <table class="stats-table">
           <thead>
@@ -917,26 +977,26 @@
       </div>
     </div>
 
-    <!-- 6. FRESH PUTAWAY MODULE DETAILS -->
-    <div id="view-freshPutaway" class="view-container">
+    <!-- 6. INVENTORY MODULE DETAILS -->
+    <div id="view-inventory" class="view-container">
       <div class="metrics-grid">
         <div class="metric-box glass">
-          <span class="metric-tag">Weekly Temperature Checks</span>
+          <span class="metric-tag">Weekly Audits</span>
           <span class="metric-val">--</span>
           <span class="metric-sub">Latest Week</span>
         </div>
         <div class="metric-box glass">
-          <span class="metric-tag">Monthly Checks</span>
+          <span class="metric-tag">Monthly Total</span>
           <span class="metric-val">--</span>
-          <span class="metric-sub">Fresh items verified</span>
+          <span class="metric-sub">Aggregated All Weeks</span>
         </div>
         <div class="metric-box glass">
-          <span class="metric-tag">Weekly Compliance</span>
+          <span class="metric-tag">Weekly Accuracy</span>
           <span class="metric-val" style="color:var(--accent-teal);">--%</span>
           <span class="metric-sub">Pass Rate</span>
         </div>
         <div class="metric-box glass">
-          <span class="metric-tag">Monthly Compliance</span>
+          <span class="metric-tag">Monthly Accuracy</span>
           <span class="metric-val" style="color:var(--accent-teal);">--%</span>
           <span class="metric-sub">Overall Pass Rate</span>
         </div>
@@ -944,20 +1004,26 @@
 
       <div class="detail-card glass">
         <div class="detail-header">
-          <h3>Fresh Putaway Cold Chain Performance</h3>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbzUAueV3bukblVyEYCCv6IUVZZbzMoXhyqlXbmSnpl7aQJPUbwVH2P7deMJAxsmt5LBGA/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
-            <span>Launch Fresh Tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
+          <h3>Inventory Cycle Count &amp; Accuracy Details</h3>
+          <div class="action-buttons-group">
+            <a href="YOUR_INVENTORY_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="https://script.google.com/a/macros/noon.com/s/AKfycbylIvK7yshYobzSVNg8TUxM-bgctxvahdpOnncdn3lxofiDJYqu38MLj6qSzEV3H_7p/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
         </div>
         <table class="stats-table">
           <thead>
             <tr>
               <th>Week</th>
-              <th>Putaway Audits</th>
-              <th>Pass Count</th>
-              <th>Temp Breaches</th>
-              <th>Cold Chain Rate</th>
+              <th>Bins Checked</th>
+              <th>Passed</th>
+              <th>Discrepancies</th>
+              <th>Location Accuracy</th>
             </tr>
           </thead>
           <tbody>
@@ -995,10 +1061,16 @@
       <div class="detail-card glass">
         <div class="detail-header">
           <h3>Return to Vendor Processing Logs</h3>
-          <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxdABMozqhkCmjls187IbXiutwdAaaL73kKF0kmlkxUzuBDJB30c9mlwBJu4CCeDmvz/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
-            <span>Launch RTV Tool</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
+          <div class="action-buttons-group">
+            <a href="YOUR_RTV_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="https://script.google.com/a/macros/noon.com/s/AKfycbxdABMozqhkCmjls187IbXiutwdAaaL73kKF0kmlkxUzuBDJB30c9mlwBJu4CCeDmvz/exec" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
         </div>
         <table class="stats-table">
           <thead>
@@ -1017,6 +1089,62 @@
       </div>
     </div>
 
+    <!-- 8. SUPERMALL MODULE DETAILS -->
+    <div id="view-supermall" class="view-container">
+      <div class="metrics-grid">
+        <div class="metric-box glass">
+          <span class="metric-tag">Weekly Supermall Audits</span>
+          <span class="metric-val">--</span>
+          <span class="metric-sub">Latest Week</span>
+        </div>
+        <div class="metric-box glass">
+          <span class="metric-tag">Monthly Total</span>
+          <span class="metric-val">--</span>
+          <span class="metric-sub">Items Inspected</span>
+        </div>
+        <div class="metric-box glass">
+          <span class="metric-tag">Weekly Compliance</span>
+          <span class="metric-val" style="color:var(--accent-teal);">--%</span>
+          <span class="metric-sub">Pass Rate</span>
+        </div>
+        <div class="metric-box glass">
+          <span class="metric-tag">Monthly Compliance</span>
+          <span class="metric-val" style="color:var(--accent-teal);">--%</span>
+          <span class="metric-sub">Overall Pass Rate</span>
+        </div>
+      </div>
+
+      <div class="detail-card glass">
+        <div class="detail-header">
+          <h3>Supermall Audit Details</h3>
+          <div class="action-buttons-group">
+            <a href="YOUR_SUPERMALL_SCRIPT_EDITOR_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link editor-btn">
+              <i class="fa-solid fa-code"></i>
+              <span>Script Editor</span>
+            </a>
+            <a href="YOUR_SUPERMALL_REPORT_URL" target="_blank" rel="noopener noreferrer" class="external-launch-link">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>View Reports</span>
+            </a>
+          </div>
+        </div>
+        <table class="stats-table">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Items Audited</th>
+              <th>Compliant Count</th>
+              <th>Defects Found</th>
+              <th>Pass Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;">Loading live data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -1024,29 +1152,30 @@
   // Central URL to your deployed Apps Script Dashboard
   const DASHBOARD_ENDPOINT = "https://script.google.com/macros/s/AKfycbxxGwiup_tedECpYTTPSmDi0jPnf7EqNdj_G6qKAX_3OQiPBj1olET39nf1dVMtbpi8/exec";
 
-  // Module Mapping matching your Code.gs keys
+  // Module Mapping matching backend keys
   const MODULE_KEYS = {
-    'inbound': 'inbound',
     'freshPutaway': 'freshPutaway',
+    'inbound': 'inbound',
     'outbound': 'outbound',
-    'inventory': 'inventory',
     'afs': 'afs',
-    'rtv': 'rtv'
+    'inventory': 'inventory',
+    'rtv': 'rtv',
+    'supermall': 'supermall'
   };
 
   const routeMeta = {
-    'dashboard': { title: 'Warehouse Audit & Quality Management', subtitle: 'Select an operational module to view weekly and monthly details.' },
-    'outbound': { title: 'Outbound Audit Details', subtitle: 'Weekly & Monthly performance metrics for outbound shipments and manifests.' },
-    'inventory': { title: 'Inventory Audit Details', subtitle: 'Weekly & Monthly breakdown of bin accuracy and cycle count discrepancies.' },
-    'inbound': { title: 'Inbound Audit Details', subtitle: 'Receiving dock accuracy, supplier PO compliance, and vendor metrics.' },
-    'afs': { title: 'AFS Audit Details', subtitle: 'Facility safety audits, compliance reports, and hazard observations.' },
-    'freshPutaway': { title: 'Fresh Putaway Audit Details', subtitle: 'Temperature logs, cold chain compliance, and fresh goods audits.' },
-    'rtv': { title: 'RTV Audit Details', subtitle: 'Return to vendor paperwork validation, vendor compliance, and batch counts.' }
+    'dashboard': { title: 'Warehouse Audit & Quality Management', subtitle: 'Select an operational tool from dashboard or access script & report settings.' },
+    'freshPutaway': { title: 'Fresh Put Audit Details', subtitle: 'Temperature logs, cold chain compliance, script editor, and reports.' },
+    'inbound': { title: 'Inbound Audit Details', subtitle: 'Receiving dock accuracy, supplier PO compliance, script editor, and reports.' },
+    'outbound': { title: 'Outbound Audit Details', subtitle: 'Shipment inspection metrics, script editor, and reports.' },
+    'afs': { title: 'AFS Audit Details', subtitle: 'Facility safety audits, compliance reports, script editor, and reports.' },
+    'inventory': { title: 'Inventory Audit Details', subtitle: 'Bin accuracy breakdown, cycle counts, script editor, and reports.' },
+    'rtv': { title: 'RTV Audit Details', subtitle: 'Return to vendor paperwork validation, script editor, and reports.' },
+    'supermall': { title: 'Supermall Audit Details', subtitle: 'Supermall fulfillment quality, script editor, and reports.' }
   };
 
   let cachedDashboardData = null;
 
-  // JSONP implementation to bypass CORS restrictions
   function loadLiveDashboardMetrics() {
     if (cachedDashboardData) return Promise.resolve(cachedDashboardData);
 
@@ -1088,12 +1217,10 @@
 
       let monthlyTotal = 0;
       let monthlyPass = 0;
-      let monthlyFail = 0;
 
       availableWeeks.forEach(w => {
         monthlyTotal += sectionData[w].total || 0;
         monthlyPass += sectionData[w].pass || 0;
-        monthlyFail += sectionData[w].fail || 0;
       });
 
       const weeklyPassRate = latestWeek.total > 0 ? ((latestWeek.pass / latestWeek.total) * 100).toFixed(1) + "%" : "0%";
@@ -1169,7 +1296,7 @@
   window.addEventListener('hashchange', handleRoute);
   window.addEventListener('DOMContentLoaded', handleRoute);
 
-  // Mobile Menu
+  // Mobile Menu Controls
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebarOverlay');
   const menuToggle = document.getElementById('menuToggle');
