@@ -1,22 +1,50 @@
-/* --- Global Variables & Theme Setup --- */
+/* =====================================================
+   Theme tokens  -  Graphite Glass
+   Dark is the default. Light is applied with
+   data-theme="light" (on <html> or <body>).
+   ===================================================== */
 :root {
-    --bg-primary: #0A0F1C;
-    --bg-surface: rgba(255, 255, 255, 0.045);
-    --bg-surface-strong: rgba(255, 255, 255, 0.075);
-    --bg-sidebar: rgba(10, 15, 28, 0.85);
-    --text-primary: #EDF1F7;
-    --text-secondary: #AEB8CC;
-    --text-muted: #6E7891;
-    --border-color: rgba(255, 255, 255, 0.10);
-    --border-color-strong: rgba(255, 255, 255, 0.16);
+    color-scheme: dark;
 
-    /* Neon Module Accent Colors */
-    --mod-outbound: #FF9E00;   /* Neon Amber */
-    --mod-inventory: #00F5D4;  /* Neon Cyan */
-    --mod-inbound: #5465FF;    /* Neon Electric Blue */
-    --mod-afs: #FF0054;        /* Neon Pink */
-    --mod-fresh: #70E000;      /* Neon Lime Green */
-    --mod-rtv: #B5179E;        /* Neon Purple */
+    /* Surfaces */
+    --bg-primary: #0C0E11;
+    --bg-glow-1: rgba(120, 140, 175, 0.16);
+    --bg-glow-2: rgba(63, 216, 194, 0.06);
+    --bg-surface: rgba(255, 255, 255, 0.05);
+    --bg-surface-strong: rgba(255, 255, 255, 0.09);
+    --bg-sidebar: rgba(16, 18, 22, 0.70);
+    --bg-overlay: rgba(4, 6, 9, 0.60);
+
+    /* Text */
+    --text-primary: #ECEEF2;
+    --text-secondary: #A8AFBC;
+    --text-muted: #6F7786;
+
+    /* Lines */
+    --border-color: rgba(255, 255, 255, 0.09);
+    --border-color-strong: rgba(255, 255, 255, 0.17);
+    --row-line: rgba(255, 255, 255, 0.05);
+    --row-hover: rgba(255, 255, 255, 0.035);
+
+    /* Glass depth */
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    --glass-shadow: 0 10px 34px rgba(0, 0, 0, 0.38);
+    --glass-shadow-hover: 0 18px 44px rgba(0, 0, 0, 0.5);
+
+    /* Main accent (active nav, status) */
+    --accent: #3FD8C2;
+    --accent-soft: rgba(63, 216, 194, 0.14);
+    --accent-faint: rgba(63, 216, 194, 0.04);
+    --accent-border: rgba(63, 216, 194, 0.28);
+    --focus-ring: rgba(63, 216, 194, 0.55);
+
+    /* Module accent colors */
+    --mod-outbound: #FFA726;
+    --mod-inventory: #19E6C7;
+    --mod-inbound: #6B7BFF;
+    --mod-afs: #FF3D78;
+    --mod-fresh: #7DE02A;
+    --mod-rtv: #C73BB3;
 
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -26,12 +54,49 @@
     --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Light Mode Theme Overrides */
+/* Light theme: frosted white glass on cool silver grey */
 [data-theme="light"] {
-    filter: invert(1) hue-rotate(180deg);
+    color-scheme: light;
+
+    --bg-primary: #E8EBF0;
+    --bg-glow-1: rgba(255, 255, 255, 0.95);
+    --bg-glow-2: rgba(120, 150, 200, 0.18);
+    --bg-surface: rgba(255, 255, 255, 0.58);
+    --bg-surface-strong: rgba(255, 255, 255, 0.85);
+    --bg-sidebar: rgba(246, 247, 250, 0.72);
+    --bg-overlay: rgba(30, 38, 52, 0.35);
+
+    --text-primary: #14181F;
+    --text-secondary: #485060;
+    --text-muted: #788091;
+
+    --border-color: rgba(20, 28, 42, 0.09);
+    --border-color-strong: rgba(20, 28, 42, 0.18);
+    --row-line: rgba(20, 28, 42, 0.07);
+    --row-hover: rgba(20, 28, 42, 0.035);
+
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --glass-shadow: 0 8px 28px rgba(40, 55, 85, 0.12);
+    --glass-shadow-hover: 0 16px 40px rgba(40, 55, 85, 0.2);
+
+    --accent: #0B9C88;
+    --accent-soft: rgba(11, 156, 136, 0.13);
+    --accent-faint: rgba(11, 156, 136, 0.04);
+    --accent-border: rgba(11, 156, 136, 0.32);
+    --focus-ring: rgba(11, 156, 136, 0.6);
+
+    /* Deeper module colors so they stay readable on light glass */
+    --mod-outbound: #D87400;
+    --mod-inventory: #00A38C;
+    --mod-inbound: #3F51E0;
+    --mod-afs: #D4003F;
+    --mod-fresh: #4A9800;
+    --mod-rtv: #9A1088;
 }
 
-/* --- Reset & Core Layout --- */
+/* =====================================================
+   Reset & core layout
+   ===================================================== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -42,8 +107,13 @@
 
 body {
     background-color: var(--bg-primary);
+    /* The soft light pools give the glass something to blur */
+    background-image:
+        radial-gradient(900px 600px at 12% -8%, var(--bg-glow-1), transparent 60%),
+        radial-gradient(800px 560px at 100% 105%, var(--bg-glow-2), transparent 60%);
+    background-attachment: fixed;
     color: var(--text-primary);
-    transition: background-color var(--transition-normal);
+    transition: background-color var(--transition-normal), color var(--transition-normal);
     overflow-x: hidden;
     min-height: 100vh;
 }
@@ -53,13 +123,21 @@ body {
     min-height: 100vh;
 }
 
-/* --- Sidebar Styling --- */
+:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* =====================================================
+   Sidebar
+   ===================================================== */
 .sidebar {
     width: 272px;
     background: var(--bg-sidebar);
-    backdrop-filter: blur(28px) saturate(150%);
-    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
     border-right: 1px solid var(--border-color);
+    box-shadow: inset -1px 0 0 var(--glass-highlight);
     display: flex;
     flex-direction: column;
     padding: 28px 18px;
@@ -67,7 +145,7 @@ body {
     top: 0;
     height: 100vh;
     z-index: 100;
-    transition: transform var(--transition-normal);
+    transition: transform var(--transition-normal), background var(--transition-normal);
 }
 
 .sidebar-header {
@@ -82,7 +160,8 @@ body {
 .logo-text h2 {
     font-size: 1.2rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
+    color: var(--text-primary);
 }
 
 .logo-text span {
@@ -114,6 +193,7 @@ body {
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: var(--radius-sm);
+    border: 1px solid transparent;
     font-size: 14.5px;
     font-weight: 500;
     transition: all var(--transition-fast);
@@ -124,6 +204,7 @@ body {
     width: 20px;
     text-align: center;
     color: var(--text-muted);
+    transition: color var(--transition-fast);
 }
 
 .nav-item:hover {
@@ -132,10 +213,18 @@ body {
     transform: translateX(2px);
 }
 
+.nav-item:hover i, .nav-item:hover svg {
+    color: var(--text-secondary);
+}
+
 .nav-item.active {
-    background: linear-gradient(135deg, rgba(63,216,194,0.14), rgba(63,216,194,0.04));
+    background: linear-gradient(135deg, var(--accent-soft), var(--accent-faint));
     color: var(--text-primary);
-    border: 1px solid rgba(63, 216, 194, 0.25);
+    border-color: var(--accent-border);
+}
+
+.nav-item.active i, .nav-item.active svg {
+    color: var(--accent);
 }
 
 .sidebar-footer {
@@ -152,8 +241,8 @@ body {
 .wh-status {
     display: flex;
     align-items: center;
-    gap: 5px;
-    color: #3FD8C2;
+    gap: 6px;
+    color: var(--accent);
     font-size: 11.5px;
 }
 
@@ -162,11 +251,13 @@ body {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #3FD8C2;
-    box-shadow: 0 0 8px rgba(63,216,194,0.35);
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-border);
 }
 
-/* --- Main Content Styling --- */
+/* =====================================================
+   Main content
+   ===================================================== */
 .main-content {
     flex: 1;
     display: flex;
@@ -187,6 +278,7 @@ body {
     display: none;
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
+    box-shadow: var(--glass-highlight);
     color: var(--text-primary);
     width: 40px;
     height: 40px;
@@ -200,6 +292,8 @@ body {
 .header-titles h1 {
     font-size: 26px;
     font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
 }
 
 .header-titles p {
@@ -208,7 +302,9 @@ body {
     margin-top: 2px;
 }
 
-/* --- Compact Cards Grid with Neon Borders --- */
+/* =====================================================
+   Module cards  -  glass panels, accent used sparingly
+   ===================================================== */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -216,29 +312,39 @@ body {
 }
 
 .audit-card {
+    --card-accent: var(--accent);
+
     border-radius: var(--radius-lg);
     padding: 18px;
     position: relative;
-    background: var(--bg-surface);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    overflow: hidden;
     cursor: pointer;
-    
-    --card-accent: #3FD8C2;
+    background: var(--bg-surface);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
 
-    /* Multi-layered Neon Border & Glow Shadow */
-    border: 1.5px solid color-mix(in srgb, var(--card-accent) 70%, white);
-    box-shadow: 
-        0 0 10px color-mix(in srgb, var(--card-accent) 30%, transparent),
-        inset 0 0 12px color-mix(in srgb, var(--card-accent) 12%, transparent);
-        
-    transition: transform var(--transition-fast), 
-                border-color var(--transition-fast), 
-                box-shadow var(--transition-fast), 
+    transition: transform var(--transition-fast),
+                border-color var(--transition-fast),
+                box-shadow var(--transition-fast),
                 background var(--transition-fast);
 }
 
-/* Specific Module Color Accents */
+/* Thin accent line along the top edge identifies the module */
+.audit-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18px;
+    right: 18px;
+    height: 2px;
+    border-radius: 0 0 2px 2px;
+    background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
+    opacity: 0.75;
+    transition: opacity var(--transition-fast), left var(--transition-fast), right var(--transition-fast);
+}
+
 .audit-card.outbound  { --card-accent: var(--mod-outbound); }
 .audit-card.inventory { --card-accent: var(--mod-inventory); }
 .audit-card.inbound   { --card-accent: var(--mod-inbound); }
@@ -247,13 +353,19 @@ body {
 .audit-card.rtv       { --card-accent: var(--mod-rtv); }
 
 .audit-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: var(--card-accent);
+    transform: translateY(-4px);
     background: var(--bg-surface-strong);
-    box-shadow: 
-        0 0 15px var(--card-accent),
-        0 0 30px color-mix(in srgb, var(--card-accent) 50%, transparent),
-        inset 0 0 15px color-mix(in srgb, var(--card-accent) 25%, transparent);
+    border-color: color-mix(in srgb, var(--card-accent) 45%, var(--border-color-strong));
+    box-shadow:
+        var(--glass-highlight),
+        var(--glass-shadow-hover),
+        0 0 28px color-mix(in srgb, var(--card-accent) 20%, transparent);
+}
+
+.audit-card:hover::before {
+    opacity: 1;
+    left: 8px;
+    right: 8px;
 }
 
 .card-badge {
@@ -262,10 +374,9 @@ body {
     right: 18px;
     font-size: 10px;
     font-weight: 700;
-    color: #FFFFFF;
-    background: color-mix(in srgb, var(--card-accent) 30%, transparent);
-    border: 1px solid var(--card-accent);
-    box-shadow: 0 0 8px color-mix(in srgb, var(--card-accent) 50%, transparent);
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--card-accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--card-accent) 45%, transparent);
     padding: 3px 9px;
     border-radius: 20px;
     letter-spacing: 0.5px;
@@ -280,22 +391,22 @@ body {
     justify-content: center;
     font-size: 18px;
     color: var(--card-accent);
-    background: color-mix(in srgb, var(--card-accent) 15%, transparent);
-    border: 1px solid var(--card-accent);
-    box-shadow: 0 0 8px color-mix(in srgb, var(--card-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--card-accent) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
     margin-bottom: 14px;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: transform var(--transition-fast), background var(--transition-fast);
 }
 
 .audit-card:hover .card-icon {
-    transform: scale(1.1) rotate(-3deg);
-    box-shadow: 0 0 14px var(--card-accent);
+    transform: scale(1.08);
+    background: color-mix(in srgb, var(--card-accent) 20%, transparent);
 }
 
 .audit-card h3 {
     font-size: 15px;
     font-weight: 600;
     margin-bottom: 6px;
+    color: var(--text-primary);
 }
 
 .audit-card p {
@@ -311,22 +422,24 @@ body {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-surface);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     padding: 9px 14px;
     border-radius: var(--radius-sm);
     font-size: 12.5px;
     font-weight: 600;
-    transition: background var(--transition-fast);
+    transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
 .audit-card:hover .open-btn {
-    background: color-mix(in srgb, var(--card-accent) 20%, transparent);
-    border-color: color-mix(in srgb, var(--card-accent) 50%, transparent);
+    background: color-mix(in srgb, var(--card-accent) 16%, transparent);
+    border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
 }
 
-/* --- Module Sub-Page Weekly / Monthly Metrics & Tables --- */
+/* =====================================================
+   Module sub-pages: metrics & tables
+   ===================================================== */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -338,7 +451,10 @@ body {
     padding: 18px 20px;
     border-radius: var(--radius-md);
     background: var(--bg-surface);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid var(--border-color);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
     display: flex;
     flex-direction: column;
 }
@@ -368,7 +484,10 @@ body {
     border-radius: var(--radius-lg);
     padding: 24px;
     background: var(--bg-surface);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid var(--border-color);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
     margin-bottom: 20px;
 }
 
@@ -390,16 +509,33 @@ body {
 
 .stats-table td {
     padding: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid var(--row-line);
     color: var(--text-secondary);
+    transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .stats-table tr:hover td {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--row-hover);
 }
 
-/* --- Mobile / Tablet Responsive Rules --- */
+/* =====================================================
+   Fallback for browsers without backdrop-filter
+   ===================================================== */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root {
+        --bg-surface: rgba(34, 38, 46, 0.92);
+        --bg-sidebar: rgba(16, 18, 22, 0.97);
+    }
+    [data-theme="light"] {
+        --bg-surface: rgba(255, 255, 255, 0.92);
+        --bg-sidebar: rgba(246, 247, 250, 0.97);
+    }
+}
+
+/* =====================================================
+   Mobile / tablet
+   ===================================================== */
 @media (max-width: 900px) {
     .menu-btn {
         display: flex;
@@ -421,8 +557,9 @@ body {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(6, 9, 16, 0.6);
+        background: var(--bg-overlay);
         backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
         z-index: 90;
     }
 
@@ -432,5 +569,11 @@ body {
 
     .main-content {
         padding: 20px 18px 50px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
     }
 }
